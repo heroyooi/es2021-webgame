@@ -5,7 +5,7 @@
 - [강좌 영상](https://www.youtube.com/watch?v=2yGhb-z8VTQ&list=PLcqDmjxt30RvEEN6eUCcSrrH-hKjCT4wt)
 - [강좌 저장소](https://github.com/ZeroCho/es2021-webgame)
 
-- [듣던 강좌 5-3. 무작위로 숫자 네 개 뽑기](https://www.youtube.com/watch?v=yIbL-mgML1A&list=PLcqDmjxt30RvEEN6eUCcSrrH-hKjCT4wt&index=50)
+- [듣던 강좌 5-5. 홈런인지 검사해서 표시하기](https://www.youtube.com/watch?v=7V6x6ejzm7k&list=PLcqDmjxt30RvEEN6eUCcSrrH-hKjCT4wt&index=52)
 
 ## 자바스크립트 강좌 4. 계산기 
 
@@ -84,3 +84,17 @@ document.querySelector('#num-2').addEventListener('click', onClickNumber);
 |Math.random() * 9|0 <= x < 9|
 |Math.random() * 9 + 1|1 <= x < 10|
 |Math.floor(Math.random() * 9 + 1)|x = {1, 2, 3, 4, 5, 6, 7, 8, 9}|
+
+```js
+if (new Set(input).size !== 4) { // 중복된 숫자가 있는가
+  return alert('중복되지 않게 입력해 주세요.');
+}
+```
+- **new Set**에 넣은 것은 중복이 제거가 된다. 위 input에 '3144'를 넣으면 {'3', '1', '4'}가 된다.
+- **new Set**은 중복이 없는 배열이라고 생각하면 된다.
+- 알아서 중복을 제거해주는 배열이 **new Set**이고, length가 아닌 size를 쓴다.
+
+```html
+<input required type="text" minlength="4" maxlength="4" pattern="^(?!.*(.).*\1)\d{4}$" />
+```
+- [정규표현식 공부 사이트](https://github.com/ziishaned/learn-regex)
