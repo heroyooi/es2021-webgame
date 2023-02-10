@@ -4,8 +4,7 @@
 
 - [강좌 영상](https://www.youtube.com/watch?v=2yGhb-z8VTQ&list=PLcqDmjxt30RvEEN6eUCcSrrH-hKjCT4wt)
 - [강좌 저장소](https://github.com/ZeroCho/es2021-webgame)
-
-- [듣던 강좌 5-8](https://www.youtube.com/watch?v=H6EQPhMgHkM&list=PLcqDmjxt30RvEEN6eUCcSrrH-hKjCT4wt&index=54)
+- [듣던 강좌 6-5. 블록, 함수 스코프, 클로저 문제](https://www.youtube.com/watch?v=Qh9Ad6TmGc0&list=PLcqDmjxt30RvEEN6eUCcSrrH-hKjCT4wt&index=60)
 
 ## 자바스크립트 강좌 4. 계산기 
 
@@ -197,3 +196,84 @@ array.map((element, i) => {
 });
 
 ```
+## 자바스크립트 강좌 6. 로또
+
+- 실제로 코딩한 순서와 다르게 동작하는 코드를 **비동기 코드**라고 한다.
+- 이벤트 리스너가 대표적인 비동기 코드이다.
+
+
+### splice vs slice
+
+```js
+const array = [1, 2, 3, 4, 5];
+array.splice(2, 1); // [3]
+array // [1, 2, 4, 5]
+
+const array2 = [1, 2, 3, 4, 5];
+array2.splice(2, 1, 9);
+array2 // [1, 2, 9, 4, 5];
+```
+- **splice(start, ?deleteCount, ...items)** : 처음 인덱스, 갯수, 추가할 아이템
+- splice는 배열에서 빼낸 값이 리턴값으로 들어있다.
+- splice는 원본 배열이 변한다.
+
+```js
+const array = [3, 2, 9, 7, 5, 8, 6, 4, 1];
+array.slice(); // [3, 2, 9, 7, 5, 8, 6, 4, 1]
+array.slice(0, 3); // [3, 2, 9]
+array.slice(3, 5); // [7, 5]
+array.slice(4, -1); // [5, 8, 6, 4]
+array.slice(4); // => array.slice(4, 0); // [5, 8, 6, 4, 1]
+array.slice(-5, -1); // [5, 8, 6, 4]
+```
+- **slice(?start, ?end)** : 처음 인덱스와 끝 인덱스, 끝 인덱스는 포함하지 않는다.
+- end의 -1은 마지막 인자를 뜻한다.
+- 두번째 인자를 생략하면 0이 된다.
+- start에 -5를 적으면 뒤에서부터 다섯번째가 처음 인덱스가 된다.
+  - 배열이 값이 많아서 뒤에서부터 숫자를 셀 때 좋다.
+- slice는 원본 배열이 변하지 않는다. map도 원본 배열은 변하지 않는다.
+
+- 원본이 변하지 않는 배열 메서드 : **slice, map**
+- 원본이 변하는 배열 메서드 : **splice, sort**
+
+### sort
+
+```js
+const array = [3, 2, 9, 7, 5, 8, 6, 4, 1];
+array.sort((a, b) => {
+  return a - b; // 오름차순
+  // return b - a; // 내림차순
+}) // [1, 2, 3, 4, 5, 6, 7, 8, 9]
+array // [1, 2, 3, 4, 5, 6, 7, 8, 9]
+```
+- sort는 원본 배열이 변한다.
+
+- sort 메서드를 사용하면 원본이 변하기 때문에, sort 메서드 앞에 slice를 사용하면 원본을 유지할 수 있게 된다.
+```js
+const array = [3, 2, 9, 7, 5, 8, 6, 4, 1];
+array.slice().sort((a, b) => a - b); // [1, 2, 3, 4, 5, 6, 7, 8, 9]
+array // [3, 2, 9, 7, 5, 8, 6, 4, 1]
+array.slice().sort((a, b) => b - a); // [9, 8, 7, 6, 5, 4, 3, 2, 1]
+array // [3, 2, 9, 7, 5, 8, 6, 4, 1]
+```
+
+- sort가 숫자만 정렬을 하는 것은 아니다. 문자나 날짜도 정렬할 수 있다.
+
+```js
+const arr = ['apple', 'orange', 'grape', 'banana', 'kiwi'];
+arr.slice().sort((a, b) => a[0].charCodeAt() - b[0].charCodeAt());
+// ['apple', 'banana', 'grape', 'kiwi', 'orange'] // 오름차순
+arr.slice().sort((a, b) => b[0].charCodeAt() - a[0].charCodeAt()); // 내림차순
+// ['orange', 'kiwi', 'grape', 'banana', 'apple']
+arr.slice().sort((a, b) => a.localeCompare(b)) // 사전순 - 오름차순
+// ['apple', 'banana', 'grape', 'kiwi', 'orange']
+arr.slice().sort((a, b) => b.localeCompare(a)) // 사전순 - 내림차순
+// ['orange', 'kiwi', 'grape', 'banana', 'apple']
+[new Date(2020, 0, 1), new Date(2021, 0, 1)].sort((a, b) => a - b);
+```
+
+```js
+Array(45).fill().map((v, i) => i + 1);
+```
+- 45개의 인자를 갖고있는 배열을 만들어준다.
+- fill()로 모두 undefined으로 만들어준 map을 통해서 다음 1부터 45까지 넣어줌
