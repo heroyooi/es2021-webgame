@@ -5,7 +5,7 @@
 - [강좌 영상](https://www.youtube.com/watch?v=2yGhb-z8VTQ&list=PLcqDmjxt30RvEEN6eUCcSrrH-hKjCT4wt)
 - [강좌 저장소](https://github.com/ZeroCho/es2021-webgame)
 
-- [듣던 강좌 5-7](https://www.youtube.com/watch?v=H6EQPhMgHkM&list=PLcqDmjxt30RvEEN6eUCcSrrH-hKjCT4wt&index=54)
+- [듣던 강좌 5-8](https://www.youtube.com/watch?v=H6EQPhMgHkM&list=PLcqDmjxt30RvEEN6eUCcSrrH-hKjCT4wt&index=54)
 
 ## 자바스크립트 강좌 4. 계산기 
 
@@ -160,3 +160,40 @@ $logs.append(`${value}: ${strike} 스트라이크 ${ball} 볼`, document.createE
 - appendChild로는 하나만 넣을 수 있고, append를 사용하면 여러 개를 동시에 넣을 수 있다.
 - append로 문자열은 createTextNode 할 필요없이 바로 넣으면 되고, 태그랑 함께 넣을 수 있다.
 - append는 여러개 동시 추가 가능
+
+
+### forEach, map, fill
+
+```js
+const answer = [3, 1, 4, 6];
+const value = '3214';
+let strike = 0;
+let ball = 0;
+answer.forEach((element, i) => {
+  const index = value.indexOf(element);
+  if (index > -1) { // 일치하는 숫자 발견
+    if (index === i) { // 자릿수도 같음
+      strike += 1;
+    } else { // 숫자만 같음
+      ball += 1;
+    }
+  }
+});
+```
+
+- forEach, map은 배열에 대한 반복문이 된다.
+
+```js
+const array = [1, 2, 3, 4];
+for (let i = 0; i < 4; i++) {
+  result.push(array[i] * 2);
+}
+console.log(result); // [2, 4, 6, 8]
+```
+
+```js
+array.map((element, i) => {
+  return element * 2;
+});
+
+```
