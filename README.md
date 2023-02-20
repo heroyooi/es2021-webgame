@@ -4,7 +4,7 @@
 
 - [강좌 영상](https://www.youtube.com/watch?v=2yGhb-z8VTQ&list=PLcqDmjxt30RvEEN6eUCcSrrH-hKjCT4wt)
 - [강좌 저장소](https://github.com/ZeroCho/es2021-webgame)
-- [듣던 강좌 6-5. 블록, 함수 스코프, 클로저 문제](https://www.youtube.com/watch?v=Qh9Ad6TmGc0&list=PLcqDmjxt30RvEEN6eUCcSrrH-hKjCT4wt&index=60)
+- [듣던 강좌 6-6. 셀프 체크 - 공 색칠하기](https://www.youtube.com/watch?v=tzGbASTSJao&list=PLcqDmjxt30RvEEN6eUCcSrrH-hKjCT4wt&index=61)
 
 ## 자바스크립트 강좌 4. 계산기 
 
@@ -277,3 +277,47 @@ Array(45).fill().map((v, i) => i + 1);
 ```
 - 45개의 인자를 갖고있는 배열을 만들어준다.
 - fill()로 모두 undefined으로 만들어준 map을 통해서 다음 1부터 45까지 넣어줌
+
+
+### 클로저
+
+- 변수는 스코프(scope, 범위)라는 것을 가집니다. var는 함수 스코프를 가지고, let은 블록 스코프를 가집니다.
+```js
+if (true) {
+  var a = 1;
+}
+console.log(a); // 1
+```
+- a는 함수 스코프를 가지기에 콘솔에서 a에 접근 가능하다.
+
+```js
+if (true) {
+  let a = 1;
+}
+console.log(a); // a is not defined
+```
+- 하지만 let은 블록 스코프라서 a에 접근할 수 없다.
+
+```js
+for (var i = 0; i < 6; i++) {
+  setTimeout(function(){
+    console.log(winBalls[i], i);
+  }, (i + 1) * 1000);
+}
+```
+- for문 안에 var를 사용할 경우 기대와 다른 결과를 만나게 된다.
+- var 스코프와 함수 클로저가 조합된 복잡한 문제이다.
+- 함수 스코프를 갖고 있는 var와 비동기가 만나면 클로저 문제가 발생한다.
+- 그래서 이를 클로저를 통해서 해결하게 된다.
+
+```js
+for (var i = 0; i < 6; i++) {
+  function(j) {
+    setTimeout(function(){
+      console.log(winBalls[j], j);
+    }, (i + 1) * 1000);
+  }(i);
+}
+```
+- 함수와 함수 바깥에 있는 변수를, 함수와 함수 안에 있는 변수 j로 만들어줌으로써 문제를 해결하게 된다.
+- **클로저**는 함수와 외부 변수와의 관계이다.
