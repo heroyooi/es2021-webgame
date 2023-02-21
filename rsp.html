@@ -48,14 +48,43 @@
   }
   let intervalId = setInterval(changeComputerHand, 50);
 
+  const scoreTable = {
+    rock: 0,
+    scissors: 1,
+    paper: -1,
+  };
+
   // clickButton 5번 호출, 인터벌 1번, 2번, 3번, 4번, 5번(얘만 inetervalId)
   // 그 다음에 버튼을 클릭하면 5번만 취소
   let clickable = true;
+  let score = 0;
   const clickButton = () => {
     if (clickable) {
       clearInterval(intervalId);
       clickable = false;
       // 점수 계산 및 화면 표시
+      const myChoice = event.target.textContent === '바위'
+        ? 'rock'
+        : event.target.textContent === '가위'
+          ? 'scissors'
+          : 'paper';
+      const myScore = scoreTable[myChoice];
+      const computerScore = scoreTable[computerChoice];
+      const diff = myScore - computerScore;
+
+      let message;
+      // 2, -1은 승리 조건이고, -2, 1은 패배 조건, 점수표 참고
+      if ([2, -1].includes(diff)) {
+        score += 1;
+        message = '승리';
+      } else if ([-2, 1].includes(diff)) {
+        score -= 1;
+        message = '패배';
+      } else {
+        message = '무승부';
+      }
+      $score.textContent = `${message} 총: ${score}점`;
+
       setTimeout(() => {
         clickable = true;
         intervalId = setInterval(changeComputerHand, 50);

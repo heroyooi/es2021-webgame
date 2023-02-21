@@ -4,7 +4,7 @@
 
 - [강좌 영상](https://www.youtube.com/watch?v=2yGhb-z8VTQ&list=PLcqDmjxt30RvEEN6eUCcSrrH-hKjCT4wt)
 - [강좌 저장소](https://github.com/ZeroCho/es2021-webgame)
-- [듣던 강좌 7-5](https://www.youtube.com/watch?v=oJrk370lH1w&list=PLcqDmjxt30RvEEN6eUCcSrrH-hKjCT4wt&index=66)
+- [듣던 강좌 7-6](https://www.youtube.com/watch?v=-DWk1Bt-03Q&list=PLcqDmjxt30RvEEN6eUCcSrrH-hKjCT4wt&index=67)
 
 ## 자바스크립트 강좌 4. 계산기 
 
@@ -468,3 +468,20 @@ fun1 === fun1; // true
 
 <hr />
 
+- 조건문에서 or로 연결되는 경우 includes나 indexOf로 다음과 같이 줄여줄 수 있다.
+```js
+if (diff === '고양이' || diff === '사자' || diff === '강아지' || diff === '거북이') {}
+if (['고양이', '사자', '강아지', '거북이'].includes(diff)) {}
+if (['고양이', '사자', '강아지', '거북이'].indexOf(diff) > -1) {}
+
+// if (diff === 2 || diff === -1) {
+if ([2, -1].includes(diff)) {
+  console.log('승리');
+// } else if (diff === -2 || diff === 1) {
+} else if ([-2, 1].includes(diff)) {
+  console.log('패배');
+// } else if (diff === 0) {
+} else {
+  console.log('무승부');
+}
+```
