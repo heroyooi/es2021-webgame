@@ -4,7 +4,7 @@
 
 - [강좌 영상](https://www.youtube.com/watch?v=2yGhb-z8VTQ&list=PLcqDmjxt30RvEEN6eUCcSrrH-hKjCT4wt)
 - [강좌 저장소](https://github.com/ZeroCho/es2021-webgame)
-- [듣던 강좌 6-6. 셀프 체크 - 공 색칠하기](https://www.youtube.com/watch?v=tzGbASTSJao&list=PLcqDmjxt30RvEEN6eUCcSrrH-hKjCT4wt&index=61)
+- [듣던 강좌 7-5](https://www.youtube.com/watch?v=oJrk370lH1w&list=PLcqDmjxt30RvEEN6eUCcSrrH-hKjCT4wt&index=66)
 
 ## 자바스크립트 강좌 4. 계산기 
 
@@ -321,3 +321,150 @@ for (var i = 0; i < 6; i++) {
 ```
 - 함수와 함수 바깥에 있는 변수를, 함수와 함수 안에 있는 변수 j로 만들어줌으로써 문제를 해결하게 된다.
 - **클로저**는 함수와 외부 변수와의 관계이다.
+
+- [실행 컨텍스트](https://www.zerocho.com/category/JavaScript/post/5741d96d094da4986bc950a0)
+
+### 공 색칠하기
+
+```js
+function colorize(number, $tag) {
+  if (number < 10) {
+    $tag.style.backgroundColor = 'red';
+    $tag.style.color = 'white';
+  } else if (number < 20) {
+    $tag.style.backgroundColor = 'orange';
+  } else if (number < 30) {
+    $tag.style.backgroundColor = 'yellow';
+  } else if (number < 40) {
+    $tag.style.backgroundColor = 'blue';
+    $tag.style.color = 'white';
+  } else {
+    $tag.style.backgroundColor = 'green';
+    $tag.style.color = 'white';
+  }
+}
+const drawBall = (number, $parent) => {
+  const $ball = document.createElement('div');
+  $ball.className = 'ball';
+  colorize(number, $ball);
+  $ball.textContent = number;
+  $parent.appendChild($ball);
+}
+```
+
+## 자바스크립트 강좌 7. 가위바위보
+
+```js
+const changeComputerHand = () => {
+  if (computerChoice === 'scissors') { // 가위면
+    computerChoice = 'rock';
+  } else if (computerChoice === 'rock') { // 바위
+    computerChoice = 'paper';
+  } else if (computerChoice === 'paper') { // 보
+    computerChoice = 'scissors';
+  }
+  $computer.style.background = `url(${IMG_URL}) ${rspX[computerChoice]} 0`;
+  $computer.style.backgroundSize = 'auto 200px';
+}
+setInterval(changeComputerHand, 50);
+```
+- setInterval은 다음과 같이 setTimeout으로 바꿀 수 있다.
+```js
+const changeComputerHand = () => {
+  if (computerChoice === 'scissors') { // 가위면
+    computerChoice = 'rock';
+  } else if (computerChoice === 'rock') { // 바위
+    computerChoice = 'paper';
+  } else if (computerChoice === 'paper') { // 보
+    computerChoice = 'scissors';
+  }
+  $computer.style.background = `url(${IMG_URL}) ${rspX[computerChoice]} 0`;
+  $computer.style.backgroundSize = 'auto 200px';
+  setTimeout(changeComputerHand, 50);
+}
+setTimeout(changeComputerHand, 50);
+```
+- 함수가 자기를 다시 호출하면 재귀 함수, 재귀 setTimeout으로 setInterval과 같은 효과를 구현할 수 있음
+- setTimeout은 시간이 정확하지 않을 수 있다. setInterval도 마찬가지이다. 정확한 시간을 보장하지는 않는다. 그래도 setInterval은 간격을 보장하려고 노력한다. setTimeout은 간격을 보장하지 않는다.
+
+
+```js
+let intervalId = setInterval(changeComputerHand, 50);
+
+const clickButton = () => {
+  clearInterval(intervalId);
+  // 점수 계산 및 화면 표시
+  setTimeout(() => {
+    // clearInterval(intervalId); // 실행 시간이 다르다.
+    intervalId = setInterval(changeComputerHand, 50);
+  }, 1000);
+}
+
+$rock.addEventListener('click', clickButton);
+$scissors.addEventListener('click', clickButton);
+$paper.addEventListener('click', clickButton);
+```
+
+- 예전 타이머로 지금 타이머를 취소할 순 없기 때문에 타이머를 만들 때마다 변수에 저장을 해줘야 한다.
+- 버튼을 연달아 클릭 시 가위바위보가 더 빠르게 움직이는 버그가 발생한다.
+- 버튼을 여러번 클릭하면 setTimeout의 타이머가 여러번 등록이 된다.
+
+<hr />
+
+- 버그의 원인
+- clickButton 5번 호출, 인터벌 1번, 2번, 3번, 4번, 5번(얘만 inetervalId)
+- 그 다음에 버튼을 클릭하면 5번만 취소
+- 그래서 setTimeout 구문 안에 **clearInterval(intervalId);** 를 넣어준다.
+
+- 또는 다음과 같이 **removeEventListener**를 사용해서 버튼을 아예 클릭이 되지 않도록 하면 된다.
+```js
+const clickButton = () => {
+  clearInterval(intervalId);
+  $rock.removeEventListener('click', clickButton);
+  $scissors.removeEventListener('click', clickButton);
+  $paper.removeEventListener('click', clickButton);
+  // 점수 계산 및 화면 표시
+  setTimeout(() => {
+    clearInterval(intervalId);
+    intervalId = setInterval(changeComputerHand, 50);
+    $rock.addEventListener('click', clickButton);
+    $scissors.addEventListener('click', clickButton);
+    $paper.addEventListener('click', clickButton);
+  }, 1000);
+}
+$rock.addEventListener('click', clickButton);
+$scissors.addEventListener('click', clickButton);
+$paper.addEventListener('click', clickButton);
+```
+
+- 하지만 removeEventListener는 다음과 같이 예외로 동작을 할 때가 있다.
+```js
+const fun = (값) => () => {
+  console.log('고차함수입니다', 값);
+}
+fun(1) === fun(1) // false
+태그.addEventListener('click', fun(1));
+태그.removeEventListener('click', fun(1)); // 같지 않기 때문에 클릭 이벤트가 지워지지 않는다.
+
+{} === {} // false
+(() => {}) === (() => {}) // false
+```
+
+- 비교하는 객체를 같게 만들어주려면 변수에 담아주면 된다.
+```js
+const a = {};
+const b = a;
+a === b; // true
+
+const fun = (값) => () => {
+  console.log('고차함수입니다', 값);
+}
+const fun1 = fun(1);
+fun1 === fun1; // true
+
+태그.addEventListener('click', fun1);
+태그.removeEventListener('click', fun1); // 같기 때문에 클릭 이벤트가 지워진다.
+```
+
+<hr />
+
